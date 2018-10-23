@@ -100,7 +100,7 @@ df.to_csv("file_path.csv")
 
 #Pushing Data to Firebase
 from google.cloud import firestore
-path=r"C:\Users\tanma\Desktop\Hackertech\hack-7b54f-firebase-adminsdk-tu2z6-36a123d635.json"
+path=r"C:\Users\tanma\Desktop\GitHub\HackerTech-2k18\hack-7b54f-firebase-adminsdk-tu2z6-36a123d635.json"
 os.environ['GOOGLE_APPLICATION_CREDENTIALS']=path
 db=firestore.Client()
 forecasts = db.collection(u'forecast')
