@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from keras.models import Sequential
-from keras.layers import Dropout
+from keras.layers import Dropout, GlobalMaxPool1D
 from keras.callbacks import ModelCheckpoint
 from keras.layers import Dense, Activation, Bidirectional
 from keras.optimizers import RMSprop
@@ -28,23 +28,16 @@ sc = MinMaxScaler()
 # Building the RNN
 regressor = Sequential()
 
-regressor.add(Bidirectional(CuDNNLSTM(units = 8,return_sequences = True, input_shape = (None, 1))))
+regressor.add(CuDNNLSTM(units = 8,return_sequences = True, input_shape = (None, 1)))
 regressor.add(Dropout(0.1))
 
-regressor.add(Bidirectional(CuDNNLSTM(units = 8,return_sequences = True, input_shape = (None, 1))))
+regressor.add(CuDNNLSTM(units = 8,return_sequences = True, input_shape = (None, 1)))
 regressor.add(Dropout(0.1))
 
-regressor.add(Bidirectional(CuDNNLSTM(units = 8,return_sequences = True, input_shape = (None, 1))))
+regressor.add(CuDNNLSTM(units = 8,return_sequences = True, input_shape = (None, 1)))
 regressor.add(Dropout(0.1))
 
-regressor.add(Bidirectional(CuDNNLSTM(units = 6,return_sequences = True)))
-regressor.add(Dropout(0.1))
-
-regressor.add(Bidirectional(CuDNNLSTM(units = 4,return_sequences = True)))
-regressor.add(Dropout(0.1))
-
-regressor.add(Bidirectional(CuDNNLSTM(units = 3)))
-regressor.add(Dropout(0.1))
+regressor.add(GlobalMaxPool1D())
 
 regressor.add(Dense(units = 1))
 
@@ -58,7 +51,7 @@ for i in (feature_indexes):
     training_set_scaled = sc.fit_transform(training_set)
     X_train = []
     y_train = []
-    timestep = 15
+    timestep = 7*24
     for i in range(obs-3650*24, obs):
         X_train.append(training_set_scaled[i-timestep:i, 0])
         y_train.append(training_set_scaled[i, 0])
@@ -72,7 +65,7 @@ for i in (feature_indexes):
     regressor.fit(X_train, y_train, epochs = 5, batch_size = 32,callbacks = callbacks_list)
     # Making the predictions and visualising the results
     inputs = []
-    for i in range(obs-48, obs):
+    for i in range(obs-7*24, obs):
         inputs.append(training_set_scaled[i-timestep:i, 0])
     inputs = np.array(inputs)
     inputs = np.reshape(inputs, (inputs.shape[0], inputs.shape[1], 1))
