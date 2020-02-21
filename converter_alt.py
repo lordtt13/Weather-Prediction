@@ -15,9 +15,11 @@ from sklearn.preprocessing import StandardScaler
 data = pd.read_csv('weatherHistory.csv')
 input_data = data.iloc[:,3:7]
 
+"""
 scaler = StandardScaler()
 scaler.fit(input_data[:3*len(input_data)//4]) # 0.75 because train_size is 75% of given data
 copy = scaler.transform(input_data)
+"""
 
 timestep = 24
 
@@ -45,7 +47,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 	return agg
 
 
-train = series_to_supervised(copy).values
+train = series_to_supervised(input_data).values
 
 def make_data(train, input_data):
     X_train = []
@@ -61,6 +63,8 @@ pickle_out = open("data.pickle","wb")
 pickle.dump(data_dump, pickle_out)
 pickle_out.close()
 
+"""
 pickle_out = open("scaler.pickle","wb")
 pickle.dump(scaler, pickle_out)
 pickle_out.close()
+"""
