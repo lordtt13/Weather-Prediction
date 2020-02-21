@@ -17,3 +17,8 @@ The constraints what we can face is the Browning Motion of weather i.e. whatever
 
 An article can sum up best what I’m trying to convey in this draft:
 https://www.ibm.com/developerworks/community/blogs/jfp/entry/Hindsight?lang=en
+
+To get random predictions or alter preds:
+'''
+python app.py
+'''
